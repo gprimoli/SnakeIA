@@ -1,5 +1,7 @@
 package SnakeGame;
 
+import SnakeGame.Enum.Direction;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,5 +116,3 @@ public class Snake {
                 '}';
     }
 }
-
-enum Direction {Up, Down, Right, Left}

@@ -1,13 +1,15 @@
 package SnakeGame;
 
+import SnakeGame.Enum.BoardPossibleValue;
+import SnakeGame.Enum.Direction;
+import SnakeGame.Exception.SnakeException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
-
-enum BoardPossibleValue {Empty, Food, SnakeHead, SnakeBody}
 
 public class GameLoop extends JPanel implements Runnable, KeyListener {
     enum GameStatus {Running, End, Pause, Error}
@@ -26,8 +28,8 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
 
     public GameLoop(int height, int width, int foodQuantity, ArrayList<Snake> snakes) {
         setPreferredSize(new Dimension(width * squareSize, height * squareSize));
-//        setFocusable(true);
-//        addKeyListener(this);
+        setFocusable(true);
+        addKeyListener(this);
 
         this.width = width;
         this.height = height;
