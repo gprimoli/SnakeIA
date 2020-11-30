@@ -3,78 +3,78 @@ package SnakeGame;
 import SnakeGame.Enum.Direction;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Snake {
     private static int idCounter = 0;
     private final int id;
+    private final LinkedList<Point> coords;
+    private final Color color;
     private boolean alive;
-    private List<Point> coords;
     private Direction direction;
-    private Color color;
 
     public Snake(int x, int y, Direction direction, Color color) {
         this.id = ++idCounter;
         this.alive = true;
-        this.coords = new ArrayList<>();
+        this.coords = new LinkedList<>();
         this.direction = direction;
         this.color = color;
 
         coords.add(new Point(x, y));
-        Point p = new Point(x, y);
-        switch (direction) {
-            case Up -> p.translate(0, +1);
-            case Down -> p.translate(0, -1);
-            case Left -> p.translate(+1, 0);
-            case Right -> p.translate(-1, 0);
-        }
-        coords.add(p);
-    }
+        coords.add(new Point(x, y));
 
+        assert coords.peekLast() != null;
+        switch (direction) {
+            case Up -> coords.peekLast().translate(0, -1);
+            case Down -> coords.peekLast().translate(0, +1);
+            case Left -> coords.peekLast().translate(-1, 0);
+            case Right -> coords.peekLast().translate(+1, 0);
+        }
+    }
 
     //action
-    public void move() {
-        Point newHead = new Point(getHead());
-        coords.remove(getLenght() - 1);
+    public LinkedList<Point> move() {
+        //Bug quando lo snake è composto da solo due punti
+        //Se si cambia velocemnte posizione puoi andare nella direzione opposta...
+        assert coords.peekFirst() != null;
+        coords.addFirst(new Point(coords.peekFirst()));
+        coords.pollLast();
         switch (direction) {
-            case Up -> newHead.translate(0, -1);
-            case Down -> newHead.translate(0, +1);
-            case Left -> newHead.translate(-1, 0);
-            case Right -> newHead.translate(+1, 0);
+            case Up -> coords.getFirst().translate(0, -1);
+            case Down -> coords.getFirst().translate(0, +1);
+            case Left -> coords.getFirst().translate(-1, 0);
+            case Right -> coords.getFirst().translate(+1, 0);
         }
-        coords.add(0, newHead);
-        if (checkSelfCollision())
-            kill();
+        return coords;
     }
 
-    public synchronized void setDirection(Direction direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
     public boolean checkSelfCollision() {
-        Point head = getHead();
-        for (int i = 1; i < coords.size(); i++)
-            if (head.equals(coords.get(i)))
-                return true;
-        return false;
+        assert coords.peekFirst() != null;
+        //La testa si sovrappone ad una parte del corpo
+        //Nel caso in cui lo snake mangia una mela gli ultimi due punti del suo corpo sono sovrapposti
+        //Ma con questa funzione contiamo solo le frequenze del primo punto!
+        return Collections.frequency(coords, coords.peekFirst()) > 1;
     }
 
     public void eat() {
-        coords.add(new Point(getTail()));
+        assert coords.peekLast() != null;
+        coords.addLast(new Point(coords.peekLast()));
     }
 
     public void kill() {
         alive = false;
     }
 
-
     //Public Getters
     public int getId() {
         return id;
     }
 
-    public List<Point> getCoords() {
+    public LinkedList<Point> getCoords() {
         return coords;
     }
 
@@ -90,22 +90,28 @@ public class Snake {
         return alive;
     }
 
-    public int getLenght() {
-        return coords.size();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Snake)) return false;
+        Snake that = (Snake) o;
+        return that.getId() == this.getId();
     }
 
+
+    //Util
     public Point getHead() {
-        return coords.get(0);
+        return this.coords.getFirst();
     }
 
-    //Private Getters
-    private Point getTail() {
-        return new Point(coords.get(getLenght() - 1).x, coords.get(getLenght() - 1).y);
+    public boolean contain(Point point) {
+        for (Point p : coords) {
+            if (p.equals(point))
+                return true;
+        }
+        return false;
     }
-
 
     //Debug Only
-    @Override
     public String toString() {
         return "Snake{" +
                 "id=" + id +
