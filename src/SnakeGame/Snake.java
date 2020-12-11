@@ -12,25 +12,43 @@ public class Snake {
     private final Color color;
     private boolean alive;
     private Direction direction;
+    private LinkedList<Direction> relativeMoves;
+
 
     public Snake(int x, int y, Direction direction, Color color) {
         this.id = ++idCounter;
         this.alive = true;
-        this.coords = new LinkedList<>();
         this.direction = direction;
         this.color = color;
+        this.relativeMoves = new LinkedList<>();
 
+        this.coords = new LinkedList<>();
         coords.add(new Point(x, y));
         coords.add(new Point(x, y));
 
         assert coords.peekLast() != null;
         switch (direction) {
-            case Up -> coords.peekLast().translate(0, -1);
-            case Down -> coords.peekLast().translate(0, +1);
-            case Left -> coords.peekLast().translate(-1, 0);
-            case Right -> coords.peekLast().translate(+1, 0);
+            case Up -> coords.peekLast().translate(0, +1);
+            case Down -> coords.peekLast().translate(0, -1);
+            case Left -> coords.peekLast().translate(+1, 0);
+            case Right -> coords.peekLast().translate(-1, 0);
         }
     }
+
+    public Snake(Snake snake) {
+        this.id = snake.id;
+        this.alive = snake.alive;
+        this.direction = snake.direction;
+        this.color = snake.color;
+        this.relativeMoves = new LinkedList<>();
+
+        this.coords = new LinkedList<>();
+        coords.addAll(snake.getCoords());
+    }
+
+
+
+
 
     //action
     public LinkedList<Point> move() {
@@ -39,6 +57,8 @@ public class Snake {
         assert coords.peekFirst() != null;
         coords.addFirst(new Point(coords.peekFirst()));
         coords.pollLast();
+        if(relativeMoves.size() != 0)
+            setRelativeDirection(relativeMoves.poll());
         switch (direction) {
             case Up -> coords.getFirst().translate(0, -1);
             case Down -> coords.getFirst().translate(0, +1);
@@ -46,10 +66,6 @@ public class Snake {
             case Right -> coords.getFirst().translate(+1, 0);
         }
         return coords;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
     }
 
     public boolean checkSelfCollision() {
@@ -69,38 +85,80 @@ public class Snake {
         alive = false;
     }
 
-    //Public Getters
-    public int getId() {
-        return id;
-    }
 
+
+
+
+    //Public Getters
     public LinkedList<Point> getCoords() {
         return coords;
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     public Color getColor() {
         return color;
     }
 
+    public boolean isMovesFinisched(){
+        return relativeMoves.size() == 0;
+    }
+
+    public Direction getCurrentDirection() {
+        return direction;
+    }
+
     public boolean isAlive() {
         return alive;
     }
 
+    public Point getHead() {
+        return this.coords.getFirst();
+    }
+
+
+
+
+
+    //Public Setter
+    public void setRelativeMoves(LinkedList<Direction> relativeMoves) {
+        this.relativeMoves.addAll(relativeMoves);
+    }
+
+    public void setAbsoluteDirection(Direction d) {
+        if (!direction.equals(d) && !direction.equals(d.getOpposite()))
+            this.direction = d;
+    }
+
+    public void setRelativeDirection(Direction d) {
+        switch (d) {
+            case Left -> {
+                switch (direction) {
+                    case Up -> setAbsoluteDirection(Direction.Left);
+                    case Down -> setAbsoluteDirection(Direction.Right);
+                    case Left -> setAbsoluteDirection(Direction.Down);
+                    case Right -> setAbsoluteDirection(Direction.Up);
+                }
+            }
+            case Right -> {
+                switch (direction) {
+                    case Up -> setAbsoluteDirection(Direction.Right);
+                    case Down -> setAbsoluteDirection(Direction.Left);
+                    case Left -> setAbsoluteDirection(Direction.Up);
+                    case Right -> setAbsoluteDirection(Direction.Down);
+                }
+            }
+        }
+    }
+
+
+
+
+
+    //Util
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Snake)) return false;
         Snake that = (Snake) o;
-        return that.getId() == this.getId();
-    }
-
-
-    //Util
-    public Point getHead() {
-        return this.coords.getFirst();
+        return that.id == this.id;
     }
 
     public boolean contain(Point point) {
@@ -109,16 +167,5 @@ public class Snake {
                 return true;
         }
         return false;
-    }
-
-    //Debug Only
-    public String toString() {
-        return "Snake{" +
-                "id=" + id +
-                ", alive=" + alive +
-                ", coords=" + coords +
-                ", direction=" + direction +
-                ", color=" + color +
-                '}';
     }
 }

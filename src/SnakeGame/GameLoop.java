@@ -12,16 +12,17 @@ import java.util.List;
 public class GameLoop extends JPanel implements Runnable, KeyListener {
     public static final int squareSize = 20;
     private static final long updateTime = 200; //In millisecondi
-    private final SnakeBoard board;
+    private final IATest board;
     private GameStatus status;
 
 
-    public GameLoop(int height, int width, int foodQuantity, List<Snake> snakes) {
+    public GameLoop(int height, int width, int foodQuantity) {
         setPreferredSize(new Dimension(width * squareSize, height * squareSize));
         setFocusable(true);
         addKeyListener(this);
 
-        this.board = new SnakeBoard(height, width, foodQuantity, snakes);
+        this.board = new IATest(height, width, foodQuantity);
+
         status = GameStatus.Running;
     }
 
@@ -45,7 +46,7 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         switch (status) {
-            case Running -> board.drawBoard(g);
+            case Running, Waiting -> board.drawBoard(g);
             case Win -> drawCenteredText(g, "HAI VINTO", Color.green);
             case Lose -> drawCenteredText(g, "HAI PERSO", Color.red);
             case Pause -> drawCenteredText(g, "PAUSA", Color.white);
@@ -57,11 +58,14 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
     private void drawCenteredText(Graphics g, String text, Color color) {
         Graphics2D g2d = (Graphics2D) g.create();
         FontMetrics fm = g2d.getFontMetrics();
-        int x = ((board.getWidth() * squareSize - fm.stringWidth(text)) / 2);
-        int y = (((board.getHeight() * squareSize - fm.getHeight()) / 2) + fm.getAscent());
+        int width = board.getWidth();
+        int height = board.getHeight();
+
+        int x = ((width * squareSize - fm.stringWidth(text)) / 2);
+        int y = (((height * squareSize - fm.getHeight()) / 2) + fm.getAscent());
 
         g.setColor(Color.black);
-        g.fillRect(0, 0, board.getWidth() * squareSize, board.getHeight() * squareSize);
+        g.fillRect(0, 0, width * squareSize, height * squareSize);
 
         g.setColor(color);
         g.drawString(text, x, y);

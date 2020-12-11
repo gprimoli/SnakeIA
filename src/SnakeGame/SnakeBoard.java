@@ -16,26 +16,32 @@ public class SnakeBoard {
     private final HashSet<Point> food;
     private final List<Snake> snakes;
 
-    public SnakeBoard(int height, int width, int maxFoodOnBoard, List<Snake> snakes) {
+    public SnakeBoard(int height, int width, int maxFoodOnBoard) {
         this.height = height;
         this.width = width;
         this.maxFoodOnBoard = maxFoodOnBoard;
 
         this.food = new HashSet<>(); //Non ci possono essere doppioni e non ci interessa l'ordinamento.
-        this.snakes = snakes;
+        this.snakes = new ArrayList<>();
+
         setFoodOnBoard();
     }
 
     public void setFoodOnBoard() {
         Random r = new Random();
         int x, y;
+        boolean free;
         while (food.size() < maxFoodOnBoard) {
+            free = true;
             x = r.nextInt(width);
             y = r.nextInt(height);
-            Point p = new Point(x,y);
+
+            Point p = new Point(x, y);
             for (Snake s : snakes)
-                if(!s.contain(p))
-                    food.add(new Point(x, y));
+                if (s.contain(p))
+                    free = false;
+            if (free)
+                food.add(new Point(x, y));
             //Documentazione Java8
             //Adds the specified element to this set if it is not already present.
         }
@@ -45,17 +51,16 @@ public class SnakeBoard {
         AtomicReference<GameStatus> status = new AtomicReference<>(GameStatus.Running);
         AtomicInteger alive = new AtomicInteger(0);
         snakes.forEach(s -> {
-            if (s.isAlive()){
+            if (s.isAlive()) {
                 s.move();
                 alive.incrementAndGet();
             }
         });
         snakes.forEach(s -> {
-            if (s.isAlive() && (s.checkSelfCollision() || outOfTheMap(s) || checkCollition(s))){
+            if (s.isAlive() && (s.checkSelfCollision() || outOfTheMap(s) || checkCollition(s))) {
                 s.kill();
                 alive.decrementAndGet();
-            }
-            else if (isFood(s.getHead())) {
+            } else if (isFood(s.getHead())) {
                 food.remove(s.getHead());
                 s.eat();
                 setFoodOnBoard();
@@ -64,7 +69,7 @@ public class SnakeBoard {
             }
         });
 
-        if(alive.get() == 0)
+        if (alive.get() == 0)
             status.set(GameStatus.Lose);
         return status.get();
     }
@@ -74,9 +79,13 @@ public class SnakeBoard {
         return p.x < 0 || p.x > width - 1 || p.y < 0 || p.y > height - 1;
     }
 
+    public boolean outOfTheMap(Point p) {
+        return p.x < 0 || p.x > width - 1 || p.y < 0 || p.y > height - 1;
+    }
+
     public boolean checkCollition(Snake s) {
         for (Snake b : snakes)
-            if (!s.equals(b) && b.contain(s.getHead()))
+            if (!s.equals(b) && b.isAlive() && b.contain(s.getHead()))
                 return true;
         return false;
     }
@@ -85,13 +94,24 @@ public class SnakeBoard {
         return food.contains(p);
     }
 
-
     public int getHeight() {
         return height;
     }
 
     public int getWidth() {
         return width;
+    }
+
+    public List<Snake> getSnakes(){
+        return snakes;
+    }
+
+    public HashSet<Point> getFood(){
+        return food;
+    }
+
+    public void addSnake(Snake s) {
+        snakes.add(s);
     }
 
     public void drawBoard(Graphics g) {
@@ -104,13 +124,15 @@ public class SnakeBoard {
 //            }
 //        }
         for (Snake s : snakes) {
-            for (Point p : s.getCoords()) {
-                if (p.equals(s.getHead())) {
-                    g.setColor(Color.BLACK);
-                    g.fillRect((p.x * squareSize - 1), (p.y * squareSize - 1), squareSize + 1, squareSize + 1);
+            if (s.isAlive()) {
+                for (Point p : s.getCoords()) {
+                    if (p.equals(s.getHead())) {
+                        g.setColor(Color.BLACK);
+                        g.fillRect((p.x * squareSize - 1), (p.y * squareSize - 1), squareSize + 1, squareSize + 1);
+                    }
+                    g.setColor(s.getColor());
+                    g.fillRect((p.x * squareSize), (p.y * squareSize), squareSize - 1, squareSize - 1);
                 }
-                g.setColor(s.getColor());
-                g.fillRect((p.x * squareSize), (p.y * squareSize), squareSize - 1, squareSize - 1);
             }
         }
 
@@ -120,22 +142,7 @@ public class SnakeBoard {
         }
     }
 
-
     public void setDirectionDebug(Direction d) {
-        Direction tmp = snakes.get(0).getDirection();
-        switch (d) {
-            case Down -> {
-                if (tmp != Direction.Up) snakes.get(0).setDirection(d);
-            }
-            case Up -> {
-                if (tmp != Direction.Down) snakes.get(0).setDirection(d);
-            }
-            case Left -> {
-                if (tmp != Direction.Right) snakes.get(0).setDirection(d);
-            }
-            case Right -> {
-                if (tmp != Direction.Left) snakes.get(0).setDirection(d);
-            }
-        }
+        snakes.get(0).setAbsoluteDirection(d);
     }
 }
