@@ -1,5 +1,6 @@
 package SnakeGame;
 
+import SnakeGame.AI.BestFirstAstar;
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
 
@@ -7,12 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.List;
 
 public class GameLoop extends JPanel implements Runnable, KeyListener {
     public static final int squareSize = 20;
-    private static final long updateTime = 200; //In millisecondi
-    private final IATest board;
+    private static final long updateTime = 5; //In millisecondi
+    private final SnakeBoard board;
     private GameStatus status;
 
 
@@ -21,7 +21,7 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        this.board = new IATest(height, width, foodQuantity);
+        this.board = new BestFirstAstar(height, width, foodQuantity);
 
         status = GameStatus.Running;
     }

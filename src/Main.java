@@ -11,7 +11,7 @@ public class Main extends JFrame {
     public void initMain(){
         setResizable(false);
 
-        snakeBoard = new GameLoop(5, 5, 1);
+        snakeBoard = new GameLoop(10000, 10000, 1);
         add(snakeBoard);
         snakeBoard.start();
 
