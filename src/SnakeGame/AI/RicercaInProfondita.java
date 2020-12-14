@@ -24,9 +24,8 @@ public class RicercaInProfondita extends IA {
         return GameStatus.Waiting;
     }
 
-    public LinkedList<Direction> getMossa() {
+    private LinkedList<Direction> getMossa() {
         ready = false;
-        Direction[] avaiableDirection = new Direction[]{Direction.Up, Direction.Left, Direction.Right};
 
         LinkedList<UtilBase> frontiera = new LinkedList<>();
         HashSet<Point> esplorati = new HashSet<>();

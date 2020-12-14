@@ -37,19 +37,13 @@ public class BestFirstAstar extends IA {
                 break;
             }
         }
-        int distance = Integer.MAX_VALUE;
-        for (Point p : getFood()) {
-            int x = GeometricalDistance.distanzaManhattan(s.getHead(), p);
-            if (x < distance)
-                distance = x;
-        }
-        return new UtilEuristic(s.getHead(), s.isAlive(), moves, distance + 1);
+
+        return new UtilEuristic(s.getHead(), s.isAlive(), moves, getDistanceFromApple(s));
     }
 
-    public LinkedList<Direction> getMossa() {
+    private LinkedList<Direction> getMossa() {
         ready = false;
         System.out.println("Inizio Calcolo!");
-        Direction[] avaiableDirection = new Direction[]{Direction.Up, Direction.Left, Direction.Right};
 
         PriorityQueue<UtilEuristic> frontiera = new PriorityQueue<>();
         HashSet<Point> esplorati = new HashSet<>();

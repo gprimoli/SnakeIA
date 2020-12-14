@@ -3,6 +3,7 @@ package SnakeGame.AI;
 import SnakeGame.Enum.Direction;
 import SnakeGame.Snake;
 import SnakeGame.SnakeBoard;
+import SnakeGame.Util.GeometricalDistance;
 import SnakeGame.Util.UtilBase;
 
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.util.LinkedList;
 
 public class IA extends SnakeBoard {
     Snake ia;
+    static final Direction[] avaiableDirection = new Direction[]{Direction.Up, Direction.Left, Direction.Right};
     boolean ready;
 
     public IA(int height, int width, int maxFoodOnBoard) {
@@ -30,5 +32,15 @@ public class IA extends SnakeBoard {
             }
         }
         return new UtilBase(s.getHead(), s.isAlive(), moves);
+    }
+
+    public int getDistanceFromApple(Snake s){
+        int distance = Integer.MAX_VALUE;
+        for (Point p : getFood()) {
+            int x = GeometricalDistance.distanzaManhattan(s.getHead(), p);
+            if (x < distance)
+                distance = x;
+        }
+        return distance;
     }
 }

@@ -1,6 +1,7 @@
 package SnakeGame;
 
 import SnakeGame.AI.BestFirstAstar;
+import SnakeGame.AI.HillClimbing;
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
 
@@ -11,7 +12,7 @@ import java.awt.event.KeyListener;
 
 public class GameLoop extends JPanel implements Runnable, KeyListener {
     public static final int squareSize = 20;
-    private static final long updateTime = 5; //In millisecondi
+    private static final long updateTime = 10; //In millisecondi
     private final SnakeBoard board;
     private GameStatus status;
 
