@@ -1,10 +1,10 @@
-package SnakeGame.AI;
+package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Snake;
 import SnakeGame.SnakeBoard;
-import SnakeGame.Util.GeometricalDistance;
 import SnakeGame.Util.UtilBase;
+import SnakeGame.Util.Utilities;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -37,7 +37,17 @@ public class IA extends SnakeBoard {
     public int getDistanceFromApple(Snake s){
         int distance = Integer.MAX_VALUE;
         for (Point p : getFood()) {
-            int x = GeometricalDistance.distanzaManhattan(s.getHead(), p);
+            int x = Utilities.distanzaManhattan(s.getHead(), p);
+            if (x < distance)
+                distance = x;
+        }
+        return distance;
+    }
+
+    public int getDistanceFromApple(Point head){
+        int distance = Integer.MAX_VALUE;
+        for (Point p : getFood()) {
+            int x = Utilities.distanzaManhattan(head, p);
             if (x < distance)
                 distance = x;
         }

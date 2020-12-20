@@ -1,4 +1,4 @@
-package SnakeGame.AI;
+package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
@@ -13,7 +13,6 @@ public class HillClimbing extends IA{
         super(height, width, maxFoodOnBoard);
     }
 
-    @Override
     public GameStatus update() {
         ia.setRelativeDirection(getMossa());
         if (ready)

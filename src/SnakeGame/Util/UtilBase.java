@@ -23,6 +23,13 @@ public class UtilBase {
         this.alive = alive;
     }
 
+    public UtilBase(UtilBase c) {
+        this.head = c.head;
+        this.moves = new LinkedList<>();
+        this.moves.addAll(c.moves);
+        this.alive = c.alive;
+    }
+
     public LinkedList<Direction> fakeAdd(Direction d){
         LinkedList<Direction> fake = new LinkedList<>();
         fake.addAll(this.moves);

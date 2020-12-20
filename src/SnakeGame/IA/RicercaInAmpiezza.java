@@ -1,4 +1,4 @@
-package SnakeGame.AI;
+package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;

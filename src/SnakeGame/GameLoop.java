@@ -1,7 +1,6 @@
 package SnakeGame;
 
-import SnakeGame.AI.BestFirstAstar;
-import SnakeGame.AI.HillClimbing;
+import SnakeGame.IA.HillClimbing;
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
 
@@ -17,12 +16,15 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
     private GameStatus status;
 
 
-    public GameLoop(int height, int width, int foodQuantity) {
+    public GameLoop(SnakeBoard ia) {
+        int width = ia.getWidth();
+        int height = ia.getHeight();
+
         setPreferredSize(new Dimension(width * squareSize, height * squareSize));
         setFocusable(true);
         addKeyListener(this);
 
-        this.board = new BestFirstAstar(height, width, foodQuantity);
+        this.board = ia;
 
         status = GameStatus.Running;
     }

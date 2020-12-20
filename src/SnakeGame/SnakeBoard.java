@@ -102,6 +102,10 @@ public class SnakeBoard {
         return width;
     }
 
+    public int getMaxFoodOnBoard() {
+        return maxFoodOnBoard;
+    }
+
     public List<Snake> getSnakes(){
         return snakes;
     }

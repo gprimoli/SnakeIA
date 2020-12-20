@@ -1,4 +1,6 @@
 import SnakeGame.GameLoop;
+import SnakeGame.IA.HillClimbing;
+import SnakeGame.IA.SimulatedAnnealing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,7 @@ public class Main extends JFrame {
     public void initMain(){
         setResizable(false);
 
-        snakeBoard = new GameLoop(50, 50, 3);
+        snakeBoard = new GameLoop(new SimulatedAnnealing(50, 50, 1));
         add(snakeBoard);
         snakeBoard.start();
 

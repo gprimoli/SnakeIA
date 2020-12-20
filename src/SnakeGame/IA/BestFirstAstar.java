@@ -1,10 +1,8 @@
 
-package SnakeGame.AI;
+package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
-import SnakeGame.Snake;
-import SnakeGame.Util.GeometricalDistance;
 import SnakeGame.Util.UtilBase;
 import SnakeGame.Util.UtilEuristic;
 
@@ -24,21 +22,6 @@ public class BestFirstAstar extends IA {
         if (ready)
             return super.update();
         return GameStatus.Waiting;
-    }
-
-
-    public UtilBase simulate(LinkedList<Direction> moves) {
-        Snake s = new Snake(ia);
-        s.setRelativeMoves(moves);
-        while (!s.isMovesFinisched()) {
-            s.move();
-            if (s.checkSelfCollision() || outOfTheMap(s) || checkCollition(s)) {
-                s.kill();
-                break;
-            }
-        }
-
-        return new UtilEuristic(s.getHead(), s.isAlive(), moves, getDistanceFromApple(s));
     }
 
     private LinkedList<Direction> getMossa() {
