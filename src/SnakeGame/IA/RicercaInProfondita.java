@@ -2,6 +2,7 @@ package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
+import SnakeGame.Snake;
 import SnakeGame.Util.UtilBase;
 
 import java.awt.*;
@@ -15,6 +16,7 @@ public class RicercaInProfondita extends IA {
 
     @Override
     public GameStatus update() {
+        Snake ia = getSnake();
         if (ia.isMovesFinisched()) {
             ia.setRelativeMoves(getMossa());
             ready = true;
@@ -26,6 +28,7 @@ public class RicercaInProfondita extends IA {
 
     private LinkedList<Direction> getMossa() {
         ready = false;
+        Snake ia = getSnake();
 
         LinkedList<UtilBase> frontiera = new LinkedList<>();
         HashSet<Point> esplorati = new HashSet<>();
@@ -58,6 +61,7 @@ public class RicercaInProfondita extends IA {
             }
         }
         System.out.println("Nessuna mossa trovata");
+        System.out.println("Destinato alla morte con una lunghezza di " + ia.getCoords().size());
         return new LinkedList<>();
     }
 }

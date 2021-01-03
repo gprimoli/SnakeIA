@@ -2,6 +2,7 @@ package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
+import SnakeGame.Snake;
 import SnakeGame.Util.UtilBase;
 import SnakeGame.Util.Utilities;
 
@@ -17,6 +18,8 @@ public class SimulatedAnnealing extends IA {
     }
 
     public GameStatus update() {
+        Snake ia = getSnake();
+
         if (ia.isMovesFinisched()) {
             ia.setRelativeMoves(getMossa());
             ready = true;
@@ -28,6 +31,8 @@ public class SimulatedAnnealing extends IA {
 
     private LinkedList<Direction> getMossa() {
         ready = false;
+        Snake ia = getSnake();
+
         Random r = new Random();
         int avaiableDirectionSize = avaiableDirection.length;
         UtilBase current = new UtilBase(ia.getHead(), ia.isAlive());

@@ -2,6 +2,7 @@ package SnakeGame.IA;
 
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
+import SnakeGame.Snake;
 import SnakeGame.Util.UtilBase;
 
 import java.awt.*;
@@ -13,6 +14,8 @@ public class RicercaInAmpiezza extends IA {
     }
 
     public GameStatus update() {
+        Snake ia = getSnake();
+
         if (ia.isMovesFinisched()) {
             ia.setRelativeMoves(getMossa());
             ready = true;
@@ -24,6 +27,8 @@ public class RicercaInAmpiezza extends IA {
 
     private LinkedList<Direction> getMossa() {
         ready = false;
+
+        Snake ia = getSnake();
         System.out.println("Inizio Calcolo!");
 
         LinkedList<UtilBase> frontiera = new LinkedList<>();
@@ -51,7 +56,7 @@ public class RicercaInAmpiezza extends IA {
                         System.out.println(out);
                         return figlio.getMoves();
                     } else {
-                        frontiera.add(figlio);
+                        frontiera.addLast(figlio);
                     }
                 }
             }

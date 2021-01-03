@@ -10,19 +10,17 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class IA extends SnakeBoard {
-    Snake ia;
     static final Direction[] avaiableDirection = new Direction[]{Direction.Up, Direction.Left, Direction.Right};
     boolean ready;
 
     public IA(int height, int width, int maxFoodOnBoard) {
         super(height, width, maxFoodOnBoard);
-        ia = new Snake(2, 2, Direction.Up, Color.BLUE);
-        addSnake(ia);
+        reset();
         ready = false;
     }
 
     public UtilBase simulate(LinkedList<Direction> moves) {
-        Snake s = new Snake(ia);
+        Snake s = new Snake(getSnake());
         s.setRelativeMoves(moves);
         while (!s.isMovesFinisched()) {
             s.move();

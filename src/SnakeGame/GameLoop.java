@@ -42,6 +42,9 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
                 lastTime = currentTime;
                 this.status = board.update();
                 this.repaint();
+            } if (this.status != GameStatus.Running){
+                board.reset();
+                this.status = GameStatus.Running;
             }
         }
     }

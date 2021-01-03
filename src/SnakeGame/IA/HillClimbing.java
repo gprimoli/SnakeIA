@@ -14,6 +14,8 @@ public class HillClimbing extends IA{
     }
 
     public GameStatus update() {
+        Snake ia = getSnake();
+
         ia.setRelativeDirection(getMossa());
         if (ready)
             return super.update();
@@ -22,6 +24,7 @@ public class HillClimbing extends IA{
 
 
     public UtilBase simulateOneDirectoin(Direction d) {
+        Snake ia = getSnake();
         Snake s = new Snake(ia);
         s.setRelativeDirection(d);
         s.move();
@@ -34,6 +37,8 @@ public class HillClimbing extends IA{
 
     private Direction getMossa(){
         ready = false;
+        Snake ia = getSnake();
+
         UtilEuristic corrente = new UtilEuristic(ia.getHead(), ia.isAlive(), getDistanceFromApple(ia));
         for(Direction d : avaiableDirection){
             UtilEuristic vicino = (UtilEuristic) simulateOneDirectoin(d);

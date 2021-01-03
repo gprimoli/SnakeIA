@@ -110,12 +110,17 @@ public class SnakeBoard {
         return snakes;
     }
 
+    public Snake getSnake(){
+        return snakes.get(0);
+    }
+
     public HashSet<Point> getFood(){
         return food;
     }
 
-    public void addSnake(Snake s) {
-        snakes.add(s);
+    public void reset() {
+        snakes.clear();
+        snakes.add(new Snake(2, 2, Direction.Up, Color.BLUE));
     }
 
     public void drawBoard(Graphics g) {
