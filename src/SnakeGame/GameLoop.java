@@ -43,6 +43,8 @@ public class GameLoop extends JPanel implements Runnable, KeyListener {
                 this.status = board.update();
                 this.repaint();
             } if (this.status != GameStatus.Running){
+                System.out.println(board.getInfo());
+
                 board.reset();
                 this.status = GameStatus.Running;
             }

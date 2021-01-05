@@ -16,6 +16,11 @@ public class SnakeBoard {
     private final HashSet<Point> food;
     private final List<Snake> snakes;
 
+    public float nodiEsplorati = 0;
+    public int nodiAllaSolzuione = 0;
+    public long tempo = 0;
+    public float lunghezzaFinale = 0;
+
     public SnakeBoard(int height, int width, int maxFoodOnBoard) {
         this.height = height;
         this.width = width;
@@ -25,6 +30,10 @@ public class SnakeBoard {
         this.snakes = new ArrayList<>();
 
         setFoodOnBoard();
+    }
+
+    public String getInfo() {
+        return nodiEsplorati  + " " + nodiAllaSolzuione  + " " + tempo / lunghezzaFinale + " " + lunghezzaFinale;
     }
 
     public void setFoodOnBoard() {
@@ -106,19 +115,24 @@ public class SnakeBoard {
         return maxFoodOnBoard;
     }
 
-    public List<Snake> getSnakes(){
+    public List<Snake> getSnakes() {
         return snakes;
     }
 
-    public Snake getSnake(){
+    public Snake getSnake() {
         return snakes.get(0);
     }
 
-    public HashSet<Point> getFood(){
+    public HashSet<Point> getFood() {
         return food;
     }
 
     public void reset() {
+        nodiEsplorati = 0;
+        nodiAllaSolzuione = 0;
+        tempo = 0;
+        lunghezzaFinale = 0;
+
         snakes.clear();
         snakes.add(new Snake(2, 2, Direction.Up, Color.BLUE));
     }

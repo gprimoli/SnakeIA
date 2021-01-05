@@ -51,6 +51,9 @@ public class HillClimbing extends IA{
             corrente.getMoves().add(avaiableDirection[r.nextInt(avaiableDirectionSize)]);
         }
         ready = true;
+
+        lunghezzaFinale = ia.getCoords().size();
+
         return corrente.getMoves().getFirst();
     }
 }

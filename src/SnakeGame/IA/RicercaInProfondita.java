@@ -36,6 +36,7 @@ public class RicercaInProfondita extends IA {
 
         long timeStart = System.currentTimeMillis();
         while (!frontiera.isEmpty()) {
+            nodiEsplorati++;
             UtilBase padre = frontiera.removeFirst();
             if (isFood(padre.getHead()))
                 return padre.getMoves();
@@ -47,12 +48,19 @@ public class RicercaInProfondita extends IA {
                 if (!esplorati.contains(figlio.getHead()) && !frontiera.contains(figlio)) {
                     if (figlio.isAlive() && isFood(figlio.getHead())) {
                         long timeEnd = System.currentTimeMillis();
-                        String out = "Tempo Necessario per la ricerca: "
-                                + (timeEnd - timeStart) +
-                                " millisecondi\n"
-                                + figlio.getMoves().size() +
-                                " mosse necessarie per arrivare ad una soluzione";
-                        System.out.println(out);
+
+                        tempo += (timeEnd - timeStart);
+                        nodiAllaSolzuione += figlio.getMoves().size();
+
+//                        System.out.println(nodiEsplorati + " " + nodiAllaSolzuione + " "+ tempo);
+
+//                        System.out.println("nodi esplorati: " + nodiEsplorati);
+//                        String out = "Tempo Necessario per la ricerca: "
+//                                + (timeEnd - timeStart) +
+//                                " millisecondi\n"
+//                                + figlio.getMoves().size() +
+//                                " mosse necessarie per arrivare ad una soluzione" + "\n";
+//                        System.out.println(out);
                         return figlio.getMoves();
                     } else {
                         frontiera.addFirst(figlio);
@@ -60,8 +68,8 @@ public class RicercaInProfondita extends IA {
                 }
             }
         }
+        lunghezzaFinale = ia.getCoords().size();
         System.out.println("Nessuna mossa trovata");
-        System.out.println("Destinato alla morte con una lunghezza di " + ia.getCoords().size());
         return new LinkedList<>();
     }
 }

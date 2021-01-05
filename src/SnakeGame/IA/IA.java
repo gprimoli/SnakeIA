@@ -13,11 +13,15 @@ public class IA extends SnakeBoard {
     static final Direction[] avaiableDirection = new Direction[]{Direction.Up, Direction.Left, Direction.Right};
     boolean ready;
 
+
+
     public IA(int height, int width, int maxFoodOnBoard) {
         super(height, width, maxFoodOnBoard);
         reset();
         ready = false;
     }
+
+
 
     public UtilBase simulate(LinkedList<Direction> moves) {
         Snake s = new Snake(getSnake());

@@ -4,9 +4,7 @@ package SnakeGame.IA;
 import SnakeGame.Enum.Direction;
 import SnakeGame.Enum.GameStatus;
 import SnakeGame.Snake;
-import SnakeGame.Util.UtilBase;
 import SnakeGame.Util.UtilEuristic;
-import SnakeGame.Util.Utilities;
 
 import java.awt.*;
 import java.util.*;
@@ -47,7 +45,6 @@ public class BestFirstAstar extends IA {
         ready = false;
         Snake ia = getSnake();
 
-        System.out.println("Inizio Calcolo!");
 
         PriorityQueue<UtilEuristic> frontiera = new PriorityQueue<>();
         HashSet<Point> esplorati = new HashSet<>();
@@ -55,15 +52,21 @@ public class BestFirstAstar extends IA {
 
         long timeStart = System.currentTimeMillis();
         while (!frontiera.isEmpty()) {
+            nodiEsplorati++;
             UtilEuristic padre = frontiera.poll();
             if (padre.isAlive() && isFood(padre.getHead())) {
                 long timeEnd = System.currentTimeMillis();
-                String out = "Tempo Necessario per la ricerca: "
-                        + (timeEnd - timeStart) +
-                        " millisecondi\n"
-                        + padre.getMoves().size() +
-                        " mosse necessarie per arrivare ad una soluzione";
-                System.out.println(out);
+                tempo += (timeEnd - timeStart);
+                nodiAllaSolzuione += padre.getMoves().size();
+                System.out.println(nodiEsplorati + " " + nodiAllaSolzuione + " "+ tempo);
+
+//                System.out.println("nodi esplorati: " + nodiEsplorati);
+//                String out = "Tempo Necessario per la ricerca: "
+//                        + (timeEnd - timeStart) +
+//                        " millisecondi\n"
+//                        + padre.getMoves().size() +
+//                        " mosse necessarie per arrivare ad una soluzione" + "\n";
+//                System.out.println(out);
                 return padre.getMoves();
             }
             esplorati.add(padre.getHead());
@@ -82,8 +85,9 @@ public class BestFirstAstar extends IA {
                         }
             }
         }
+
+        lunghezzaFinale = ia.getCoords().size();
         System.out.println("Nessuna mossa trovata");
-        System.out.println("Destinato alla morte con una lunghezza di " + ia.getCoords().size());
         return new LinkedList<>();
     }
 }
