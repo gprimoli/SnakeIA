@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class SimulatedAnnealing extends IA {
     private final static double temperature = 1000;
-    private final static double coolingFactor = 0.995;
+    private final static double coolingFactor = 0.997;
 
     public SimulatedAnnealing(int height, int width, int maxFoodOnBoard) {
         super(height, width, maxFoodOnBoard);
@@ -21,6 +21,11 @@ public class SimulatedAnnealing extends IA {
         Snake ia = getSnake();
 
         if (ia.isMovesFinisched()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             ia.setRelativeMoves(getMossa());
             ready = true;
         }
